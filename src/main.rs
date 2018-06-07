@@ -12,17 +12,18 @@ enum Error {
 }
 
 impl<'a> Block<'a> {
-    fn hash(&self, buf: &mut [u8; 32]) -> Result<(), Error> {
+    fn hash(&self) -> Result<[u8; 32], Error> {
         let v = digest(Algorithm::SHA256, self.prev_hash);
         if v.len() != 32 {
             return Err(Error::BadHash);
         }
+        let mut digest: [u8; 32] = [0; 32];
         let mut i: usize = 0;
         for byte in v.iter() {
-            buf[i] = *byte;
+            digest[i] = *byte;
             i += 1;
         }
-        Ok(())
+        Ok(digest)
     }
 }
 
@@ -30,8 +31,7 @@ fn main() -> Result<(), Error> {
     let block = Block {
         prev_hash: b"foo bar",
     };
-    let mut digest: [u8; 32] = [0; 32];
-    block.hash(&mut digest)?;
+    let digest = block.hash()?;
     println!("Block hash: {:?}", digest);
     Ok(())
 }
