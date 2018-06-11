@@ -18,14 +18,6 @@ impl<T> List<T> {
         List { head: None }
     }
 
-    pub fn split(&mut self) -> Self {
-        let head = match self.head {
-            Some(ref node) => Some(Rc::clone(node)),
-            None => None,
-        };
-        List { head }
-    }
-
     pub fn push(&mut self, val: T) {
         let next = mem::replace(&mut self.head, None);
         self.head = Some(Rc::new(Node { val, next }));
@@ -37,6 +29,16 @@ impl<T> List<T> {
             None => None,
         };
         ListIterator { next_node }
+    }
+}
+
+impl<T> Clone for List<T> {
+    fn clone(&self) -> Self {
+        let head = match self.head {
+            Some(ref node) => Some(Rc::clone(node)),
+            None => None,
+        };
+        List { head }
     }
 }
 
@@ -90,7 +92,7 @@ mod tests {
         let mut l1: List<&str> = List::new();
         l1.push("foo");
         l1.push("bar");
-        let mut l2: List<&str> = l1.split();
+        let mut l2: List<&str> = l1.clone();
         l2.push("baz");
         let l1collected: Vec<&&str> = l1.iter().collect();
         assert_eq!(l1collected, vec![&"bar", &"foo"]);
