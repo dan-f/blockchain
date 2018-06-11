@@ -9,7 +9,7 @@ struct Node<T> {
     next: NodeLink<T>,
 }
 
-struct List<T> {
+pub struct List<T> {
     head: NodeLink<T>,
 }
 
@@ -42,7 +42,7 @@ impl<T> Clone for List<T> {
     }
 }
 
-struct ListIterator<'a, T>
+pub struct ListIterator<'a, T>
 where
     T: 'a,
 {
@@ -69,7 +69,7 @@ mod tests {
 
     #[test]
     fn new_list_is_empty() {
-        let mut l: List<i32> = List::new();
+        let l: List<i32> = List::new();
         assert_eq!(l.iter().next(), None);
     }
 
