@@ -4,3 +4,4 @@ extern crate crypto_hash;
 extern crate serde_derive;
 
 pub mod block;
+pub mod list;
