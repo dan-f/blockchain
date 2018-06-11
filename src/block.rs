@@ -4,6 +4,8 @@ use crypto_hash::{digest, Algorithm};
 #[derive(Serialize, Deserialize)]
 pub struct Block {
     pub timestamp: u64,
+    pub nonce: u64,
+    pub data: String,
     pub prev_hash: Vec<u8>,
 }
 
