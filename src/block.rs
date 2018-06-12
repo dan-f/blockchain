@@ -1,4 +1,8 @@
 use crypto;
+use util;
+
+const GENESIS_NONCE: u64 = 151771;
+pub const GENESIS_HASH: &str = &"001d972e7545f7cbb6d0497ddc47b8eece30a49ee3213fb36e1e851d9baae1";
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct GenesisBlock {
@@ -9,8 +13,22 @@ pub struct GenesisBlock {
 }
 
 impl GenesisBlock {
-    pub fn hash(&self) -> Result<Vec<u8>, crypto::Error> {
-        crypto::hash(&self)
+    pub fn new() -> Self {
+        let genesis = GenesisBlock {
+            block_num: 0,
+            timestamp: 1528749153,
+            nonce: GENESIS_NONCE,
+            data: String::from("Coded by Dan & Henry at RC 6/11/2018!"),
+        };
+        let genesis_hash = genesis.hash();
+        if util::to_hex_string(&genesis_hash) != GENESIS_HASH {
+            panic!("Hash of genesis block is not as expected");
+        }
+        genesis
+    }
+
+    pub fn hash(&self) -> Vec<u8> {
+        crypto::hash(&self).expect("Failed to hash genesis block")
     }
 }
 
