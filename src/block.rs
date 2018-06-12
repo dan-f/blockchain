@@ -55,3 +55,17 @@ impl Block {
         Ok(hash)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_constructs_a_genesis_block() {
+        let genesis = GenesisBlock::new();
+        let genesis_hash = genesis.hash();
+        assert_eq!(genesis.data, "Coded by Dan & Henry at RC 6/11/2018!");
+        assert_eq!(&genesis_hash[0..2], [0, 0]);
+        assert_eq!(util::to_hex_string(&genesis_hash[..]), GENESIS_HASH);
+    }
+}

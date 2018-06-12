@@ -26,15 +26,6 @@ mod tests {
     use util;
 
     #[test]
-    fn new_genesis_block() {
-        let genesis = GenesisBlock::new();
-        let genesis_hash = genesis.hash();
-        assert_eq!(genesis.data, "Coded by Dan & Henry at RC 6/11/2018!");
-        assert_eq!(&genesis_hash[0..2], [0, 0]);
-        assert_eq!(util::to_hex_string(&genesis_hash[..]), GENESIS_HASH);
-    }
-
-    #[test]
     fn new_blockchain_uses_genesis_block() {
         let chain = BlockChain::new();
         assert_eq!(chain.genesis.hash(), chain.genesis_hash);
