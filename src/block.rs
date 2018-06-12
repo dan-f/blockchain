@@ -27,4 +27,13 @@ impl Block {
     pub fn hash(&self) -> Result<Vec<u8>, crypto::Error> {
         crypto::hash(&self)
     }
+
+    pub fn mine(&mut self) -> Result<Vec<u8>, crypto::Error> {
+        let mut hash = self.hash()?;
+        while hash[0..2] != [0, 0] {
+            self.nonce += 1;
+            hash = self.hash()?;
+        }
+        Ok(hash)
+    }
 }
