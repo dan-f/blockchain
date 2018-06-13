@@ -11,16 +11,18 @@ struct Node<T> {
 
 pub struct List<T> {
     head: NodeLink<T>,
+    len: usize,
 }
 
 impl<T> List<T> {
     pub fn new() -> Self {
-        List { head: None }
+        List { head: None, len: 0 }
     }
 
     pub fn push(&mut self, val: T) {
         let next = mem::replace(&mut self.head, None);
         self.head = Some(Rc::new(Node { val, next }));
+        self.len += 1;
     }
 
     pub fn iter(&self) -> ListIterator<T> {
@@ -30,6 +32,10 @@ impl<T> List<T> {
         };
         ListIterator { next_node }
     }
+
+    pub fn len(&self) -> usize {
+        self.len
+    }
 }
 
 impl<T> Clone for List<T> {
@@ -38,7 +44,10 @@ impl<T> Clone for List<T> {
             Some(ref node) => Some(Rc::clone(node)),
             None => None,
         };
-        List { head }
+        List {
+            head,
+            len: self.len,
+        }
     }
 }
 
@@ -98,5 +107,15 @@ mod tests {
         assert_eq!(l1collected, vec![&"bar", &"foo"]);
         let l2collected: Vec<&&str> = l2.iter().collect();
         assert_eq!(l2collected, vec![&"baz", &"bar", &"foo"]);
+    }
+
+    #[test]
+    fn list_has_a_length() {
+        let mut l1: List<&str> = List::new();
+        assert_eq!(l1.len(), 0);
+        let l2 = l1.clone();
+        l1.push("foo");
+        assert_eq!(l1.len(), 1);
+        assert_eq!(l2.len(), 0);
     }
 }
